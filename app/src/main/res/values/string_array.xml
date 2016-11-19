@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="spinner_array">
+        <item>In Stock</item>
+        <item>Running Low</item>
+        <item>All Out</item>
+    </string-array>
+</resources>

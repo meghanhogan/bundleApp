@@ -7,4 +7,5 @@
     <string name="select_status">Set Status</string>
     <string name="bundle_items">Bundle Items</string>
     <string name="new_bundle">New Bundle</string>
+    <string name="request_payment">Request Payment</string>
 </resources>
