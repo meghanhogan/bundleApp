@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/group_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:text="@string/group_text"
+            android:gravity="center"
+            android:padding="5dp" />
+        <Button
+            android:id="@+id/add_member_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawable="@drawable/add_icon"/>
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/recycler_view_1"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:layout_margin="10dp">
+    </android.support.v7.widget.RecyclerView>
+
+    <Button
+        android:id="@+id/list_add_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:drawable="@drawable/add_icon" />
+
+    <Button
+        android:id="@+id/list_bundle_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/bundle"
+        android:layout_gravity="bottom|right"/>
+
+</LinearLayout>
