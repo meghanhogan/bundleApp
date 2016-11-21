@@ -1,35 +1,52 @@
 package com.bignerdranch.android.finalproject374;
 
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
+
+import java.util.UUID;
 
 /**
  * Created by meghanhogan on 11/17/16.
  */
 
 public class ItemFragment extends Fragment {
+
+    private static final String ARG_ITEM_ID = "item_id";
+    private static final String DIALOG_SELECTOR = "DialogSelector";
+    private static final int REQUEST_STATUS = 0;
+
     private Item mItem;
     private EditText mItemName;
     private EditText mItemPrice;
-    private Spinner mStatusSelector;
+    private Button mStatusSelector;
     private int mStartOf1 = -1; //keeps track of where 'running low' items start in the list
     private int mStartOf2 = -1; //keeps track of where 'all out' items start
                                 //initialized to -1 so we know if its the first time an item of said status is added
 
+    public static ItemFragment newInstance(UUID crimeId) {
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_ITEM_ID, crimeId);
+        ItemFragment fragment = new ItemFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mItem = new Item();
+        UUID ItemId = (UUID) getArguments().getSerializable(ARG_ITEM_ID);
+        mItem =  ItemGen.get(getActivity()).getItem(ItemId);
     }
 
     @Override
@@ -38,6 +55,7 @@ public class ItemFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_item, container, false);
 
         mItemName = (EditText)v.findViewById(R.id.item_name);
+        mItemName.setText(mItem.getName());
         mItemName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(
@@ -56,6 +74,7 @@ public class ItemFragment extends Fragment {
         });
 
         mItemPrice = (EditText)v.findViewById(R.id.item_price);
+        mItemPrice.setText("$"+mItem.getPrice());
         mItemPrice.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(
@@ -65,8 +84,7 @@ public class ItemFragment extends Fragment {
             @Override
             public void onTextChanged(
                     CharSequence s, int start, int before, int count) {
-                Double price = Double.parseDouble(s.toString());
-                mItem.setPrice(price);
+                mItem.setPrice(s.toString());
 
             }
             @Override
@@ -75,62 +93,31 @@ public class ItemFragment extends Fragment {
             }
         });
 
-        mStatusSelector = (Spinner)v.findViewById(R.id.status_selector);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
-                R.array.spinner_array, android.R.layout.simple_spinner_item);
-        // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
-        mStatusSelector.setAdapter(adapter);
-
-        mStatusSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-            public void onItemSelected(AdapterView<?> parent, View view, int pos, long id)
-            {
-                String selectedItem = parent.getSelectedItem().toString();
-    /*
-                find a way to read selections~!
-                when selected swap item's position in the list
-                ItemGen.getItems --> update order
-
-                items = ItemGen.getItems()
-                if(selectedItem == "In Stock"){
-                    check if new status is different than old status
-                    mItem.setStatus(0);
-                    if new status is different than old:
-                        item.getPos()
-                        check to see if Pos > mStartOf1
-                            if not, move to correct pos
-
-                }
-                else if(selectedItem == "Running Low"){
-                    check to see if new is dif than old
-                    mItem.setStatus(1);
-                    if new is diff:
-                        item.getPos()
-                        check to see if mStartOf1 <= pos < StartOf2
-                            if not, move to correct pos
-                }
-                else if(selectedItem == "All Out"){
-                    check to see if new is diff than old
-                    mItem.setStatus(2);
-                    if new is diff:
-                        item.getPos()
-                        check to see if pos >= startOf2
-                            if not, move to correct pos
-                }
-                System.out.println("item status is " + mItem.getStatus());
-    */
-
-
-            }
-
-            public void onNothingSelected(AdapterView<?> arg0) {
-                // TODO Auto-generated method stub
+        mStatusSelector = (Button) v.findViewById(R.id.status_selector);
+        mStatusSelector.setText(mItem.statusString());
+        mStatusSelector.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager manager = getFragmentManager();
+                StatusSelectorFragment dialog = StatusSelectorFragment.newInstance(mItem.statusString());
+                dialog.setTargetFragment(ItemFragment.this, REQUEST_STATUS);
+                dialog.show(manager, DIALOG_SELECTOR);
             }
         });
 
         return v;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK) {
+            return; }
+        if (requestCode == REQUEST_STATUS) {
+            String status = (String) data
+                    .getSerializableExtra(StatusSelectorFragment.EXTRA_STATUS);
+            mItem.setStatus(mItem.convertStatus(status));
+            mStatusSelector.setText(status);
+        }
     }
 
 

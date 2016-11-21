@@ -31,7 +31,8 @@ public class ItemGen {
             Item item = new Item();
             item.setName("Test item #" + i);
             item.setPos(i);
-            item.setStatus(i%3);
+            item.setStatus(0);
+            item.setPrice("3.00");
             mItems.add(item);
         }
     }

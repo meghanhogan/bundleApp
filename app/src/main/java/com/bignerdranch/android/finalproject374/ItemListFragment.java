@@ -1,5 +1,6 @@
 package com.bignerdranch.android.finalproject374;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -36,29 +38,48 @@ public class ItemListFragment extends Fragment{
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateUI();
+    }
+
     private void updateUI(){
         ItemGen itemGen = ItemGen.get(getActivity());
         List<Item> items = itemGen.getItems();
 
         mAdapter = new ItemAdapter(items);
         mItemRecyclerView.setAdapter(mAdapter);
+
+        if (mAdapter == null) {
+            mAdapter = new ItemAdapter(items);
+            mItemRecyclerView.setAdapter(mAdapter);
+        } else {
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
-    private class ItemHolder extends RecyclerView.ViewHolder{
+    private class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView mNameTextView;
         private Item mItem;
 
         public ItemHolder(View itemView){
             super(itemView);
+            itemView.setOnClickListener(this);
 
             mNameTextView = (TextView) itemView.findViewById(R.id.list_item_name_text_view);
+        }
+
+        @Override
+        public void onClick(View v) {
+            Intent intent = ItemActivity.newIntent(getActivity(), mItem.getId());
+            startActivity(intent);
         }
 
         public void bindItem(Item item){
             mItem = item;
             mNameTextView.setText(item.getName());
-            mNameTextView.setTextColor(item.color());
         }
     }
 

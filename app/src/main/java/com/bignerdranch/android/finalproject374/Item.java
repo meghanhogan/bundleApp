@@ -15,7 +15,7 @@ public class Item {
 
     private UUID mId;
     private String mName;
-    private Double mPrice;
+    private String mPrice;
     private int mStatus; //can be 0, 1, 2 == in stock, running low, out
     private int mPosition;
 
@@ -37,11 +37,11 @@ public class Item {
         mName = name;
     }
 
-    public Double getPrice(){
+    public String getPrice(){
         return mPrice;
     }
 
-    public void setPrice(Double price){
+    public void setPrice(String price){
         mPrice = price;
     }
 
@@ -61,17 +61,33 @@ public class Item {
         mPosition = pos;
     }
 
-    public int color(){
+    public String statusString(){
         if (mStatus == 0){
-            return GREEN;
+            return "In Stock";
         }
         else if (mStatus== 1){
-            return YELLOW;
+            return "Running Low";
         }
         else if (mStatus == 2){
-            return RED;
+            return "All Out";
         }
-        return BLACK;
+        return "Set Status";
+    }
+
+    public int convertStatus(String status){
+
+        if (status.equals("In Stock")){
+            return 0;
+        }
+
+        else if (status.equals("Running Low")){
+            return 1;
+        }
+
+        else if (status.equals("All Out")){
+            return 2;
+        }
+        return -1;
     }
 
 }
