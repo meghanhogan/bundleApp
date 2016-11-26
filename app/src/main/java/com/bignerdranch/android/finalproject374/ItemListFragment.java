@@ -60,11 +60,12 @@ public class ItemListFragment extends Fragment{
                         // if left, remove from adapter
                         if (direction == ItemTouchHelper.LEFT){
                             System.out.println("swiped left");
-                            //remove from adapter
+                            mAdapter.remove(viewHolder.getAdapterPosition());
                         }
                         if (direction == ItemTouchHelper.RIGHT){
                             //start itemFragment intent
                             System.out.println("swiped right");
+                            mAdapter.onSwipe(viewHolder.getAdapterPosition());
                         }
 
                     }
@@ -119,6 +120,7 @@ public class ItemListFragment extends Fragment{
             mItem = item;
             mNameTextView.setText(item.getName());
         }
+
     }
 
     private class ItemAdapter extends RecyclerView.Adapter<ItemHolder> {
@@ -149,6 +151,12 @@ public class ItemListFragment extends Fragment{
 
         public void remove(int position){
             mItems.remove(position);
+        }
+
+        public void onSwipe(int position){
+            Item item = mItems.get(position);
+            Intent intent = ItemActivity.newIntent(getActivity(), item.getId());
+            startActivity(intent);
         }
     }
 
