@@ -5,15 +5,17 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
 import static android.graphics.Color.GREEN;
+import static android.support.v7.widget.helper.ItemTouchHelper.Callback.makeMovementFlags;
 
 /**
  * Created by meghanhogan on 11/17/16.
@@ -23,6 +25,7 @@ public class ItemListFragment extends Fragment{
 
     private RecyclerView mItemRecyclerView;
     private ItemAdapter mAdapter;
+    private Button mAddItemButton;
 
 
     @Override
@@ -32,7 +35,42 @@ public class ItemListFragment extends Fragment{
         mItemRecyclerView = (RecyclerView)view.findViewById(R.id.recycler_view_1);;
         mItemRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        mAddItemButton = (Button)view.findViewById(R.id.list_add_button);
+        mAddItemButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Item item = new Item();
+                ItemGen.get(getActivity()).addItem(item);
+                Intent intent = ItemActivity.newIntent(getActivity(), item.getId());
+                startActivity(intent);
+            }
+        });
 
+         ItemTouchHelper mIth = new ItemTouchHelper(
+                new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.START | ItemTouchHelper.END,
+                        ItemTouchHelper.START | ItemTouchHelper.END) {
+                    public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                        final int fromPos = viewHolder.getAdapterPosition();
+                        final int toPos = target.getAdapterPosition();
+                        // move item in `fromPos` to `toPos` in adapter.
+                        System.out.println("moved");
+                        return true;// true if moved, false otherwise
+                    }
+                    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                        // if left, remove from adapter
+                        if (direction == ItemTouchHelper.LEFT){
+                            System.out.println("swiped left");
+                            //remove from adapter
+                        }
+                        if (direction == ItemTouchHelper.RIGHT){
+                            //start itemFragment intent
+                            System.out.println("swiped right");
+                        }
+
+                    }
+                });
+
+        mIth.attachToRecyclerView(mItemRecyclerView);
         updateUI();
 
         return view;
@@ -108,5 +146,10 @@ public class ItemListFragment extends Fragment{
         public int getItemCount(){
             return mItems.size();
         }
+
+        public void remove(int position){
+            mItems.remove(position);
+        }
     }
+
 }

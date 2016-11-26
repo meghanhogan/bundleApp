@@ -27,14 +27,11 @@ public class ItemGen {
     }
     private ItemGen(Context context) {
         mItems = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            Item item = new Item();
-            item.setName("Test item #" + i);
-            item.setPos(i);
-            item.setStatus(0);
-            item.setPrice("3.00");
-            mItems.add(item);
-        }
+    }
+
+    public void addItem(Item i){
+        mItems.add(i);
+        i.setPos(mItems.size()-1);
     }
 
     public List<Item> getItems(){

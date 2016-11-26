@@ -30,9 +30,9 @@ public class ItemFragment extends Fragment {
     private EditText mItemName;
     private EditText mItemPrice;
     private Button mStatusSelector;
-    private int mStartOf1 = -1; //keeps track of where 'running low' items start in the list
-    private int mStartOf2 = -1; //keeps track of where 'all out' items start
-                                //initialized to -1 so we know if its the first time an item of said status is added
+    private int mStartOf1; //keeps track of where 'running low' items start in the list
+    private int mStartOf2; //keeps track of where 'all out' items start
+
 
     public static ItemFragment newInstance(UUID crimeId) {
         Bundle args = new Bundle();
@@ -117,6 +117,28 @@ public class ItemFragment extends Fragment {
                     .getSerializableExtra(StatusSelectorFragment.EXTRA_STATUS);
             mItem.setStatus(mItem.convertStatus(status));
             mStatusSelector.setText(status);
+            moveItem();
+        }
+    }
+
+    public void moveItem(){
+        if (mItem.getStatus() == 0){
+            if (mItem.getPos() > mStartOf1){
+                //move up
+            }
+        }
+        if (mItem.getStatus() == 1){
+            if(mItem.getPos() > mStartOf1){
+                //move down
+            }
+            else if(mItem.getPos() > mStartOf2){
+                //move up
+            }
+        }
+        if (mItem.getStatus() == 3){
+            if(mItem.getPos() < mStartOf2){
+                //move down
+            }
         }
     }
 
