@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static android.graphics.Color.GREEN;
@@ -26,6 +27,8 @@ public class ItemListFragment extends Fragment{
     private RecyclerView mItemRecyclerView;
     private ItemAdapter mAdapter;
     private Button mAddItemButton;
+    private Button mBundleButton;
+    public ArrayList<Item> mBundleList = new ArrayList<Item>();
 
 
     @Override
@@ -46,34 +49,22 @@ public class ItemListFragment extends Fragment{
             }
         });
 
-         ItemTouchHelper mIth = new ItemTouchHelper(
-                new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.START | ItemTouchHelper.END,
-                        ItemTouchHelper.START | ItemTouchHelper.END) {
-                    public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                        final int fromPos = viewHolder.getAdapterPosition();
-                        final int toPos = target.getAdapterPosition();
-                        // move item in `fromPos` to `toPos` in adapter.
-                        System.out.println("moved");
-                        return true;// true if moved, false otherwise
-                    }
-                    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                        // if left, remove from adapter
-                        if (direction == ItemTouchHelper.LEFT){
-                            System.out.println("swiped left");
-                            mAdapter.remove(viewHolder.getAdapterPosition());
-                        }
-                        if (direction == ItemTouchHelper.RIGHT){
-                            //start itemFragment intent
-                            System.out.println("swiped right");
-                            mAdapter.onSwipe(viewHolder.getAdapterPosition());
-                        }
+        mBundleButton = (Button)view.findViewById(R.id.list_bundle_button);
+        mBundleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = BundleActivity.newIntent(getActivity(), mBundleList);
+                startActivity(intent);
+            }
+        });
 
-                    }
-                });
-
-        mIth.attachToRecyclerView(mItemRecyclerView);
         updateUI();
+        ItemTouchHelper.Callback callback = new ListItemTouchHelper(mAdapter);
+        ItemTouchHelper mIth = new ItemTouchHelper(callback);
+        mIth.attachToRecyclerView(mItemRecyclerView);
 
+
+        //System.out.println("does the list exist? " + mBundleList.size());
         return view;
     }
 
@@ -89,12 +80,40 @@ public class ItemListFragment extends Fragment{
 
         mAdapter = new ItemAdapter(items);
         mItemRecyclerView.setAdapter(mAdapter);
+        mBundleList.clear();
 
         if (mAdapter == null) {
             mAdapter = new ItemAdapter(items);
             mItemRecyclerView.setAdapter(mAdapter);
         } else {
+            mAdapter.setItems(items);
             mAdapter.notifyDataSetChanged();
+        }
+    }
+
+    public class ListItemTouchHelper extends ItemTouchHelper.SimpleCallback {
+        private ItemAdapter mAdapter;
+
+        public ListItemTouchHelper(ItemAdapter itemAdapter){
+            super(ItemTouchHelper.UP| ItemTouchHelper.DOWN, ItemTouchHelper.LEFT|ItemTouchHelper.RIGHT);
+            this.mAdapter = itemAdapter;
+        }
+        @Override
+        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+            return false;// drag and drop not included
+        }
+        @Override
+        public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+            // if left, remove from adapter
+            if (direction == ItemTouchHelper.LEFT){
+                //System.out.println("swiped left");
+                mAdapter.remove(viewHolder.getAdapterPosition());
+            }
+            if (direction == ItemTouchHelper.RIGHT){
+                //System.out.println("swiped right");
+                mAdapter.onSwipe(viewHolder.getAdapterPosition());
+            }
+
         }
     }
 
@@ -106,19 +125,35 @@ public class ItemListFragment extends Fragment{
         public ItemHolder(View itemView){
             super(itemView);
             itemView.setOnClickListener(this);
-
             mNameTextView = (TextView) itemView.findViewById(R.id.list_item_name_text_view);
         }
 
         @Override
         public void onClick(View v) {
-            Intent intent = ItemActivity.newIntent(getActivity(), mItem.getId());
-            startActivity(intent);
+            boolean inList = listCheck();
+            if(inList){
+                mBundleList.add(mItem);
+                mNameTextView.setBackgroundResource(R.color.colorSelected);
+            }
+            else if (!inList){
+                mNameTextView.setBackgroundResource(R.color.colorPrimary);
+            }
+
         }
 
         public void bindItem(Item item){
             mItem = item;
             mNameTextView.setText(item.getName());
+        }
+
+        public boolean listCheck(){
+            for(int i = 0; i<mBundleList.size(); i++){
+                if (mBundleList.get(i).getId() == mItem.getId()){
+                    mBundleList.remove(i);
+                    return false;
+                }
+            }
+            return true;
         }
 
     }
@@ -151,12 +186,18 @@ public class ItemListFragment extends Fragment{
 
         public void remove(int position){
             mItems.remove(position);
+            notifyItemRemoved(position);
+            updateUI();
         }
 
         public void onSwipe(int position){
             Item item = mItems.get(position);
             Intent intent = ItemActivity.newIntent(getActivity(), item.getId());
             startActivity(intent);
+        }
+
+        public void setItems(List<Item> items){
+            mItems=items;
         }
     }
 

@@ -1,5 +1,6 @@
 package com.bignerdranch.android.finalproject374;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 
@@ -7,7 +8,7 @@ import java.util.UUID;
  * Created by meghanhogan on 11/17/16.
  */
 
-public class Item {
+public class Item implements Serializable {
 
     private UUID mId;
     private String mName;
@@ -19,7 +20,10 @@ public class Item {
         //generate random unique id for each item
         mId = UUID.randomUUID();
         mStatus = 0;
-        mPrice = "0.00";
+    }
+
+    public Item(UUID uuid){
+        mId = uuid;
     }
 
     public UUID getId(){

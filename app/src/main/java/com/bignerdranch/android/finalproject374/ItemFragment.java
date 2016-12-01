@@ -32,11 +32,12 @@ public class ItemFragment extends Fragment {
     private Button mStatusSelector;
     private int mStartOf1; //keeps track of where 'running low' items start in the list
     private int mStartOf2; //keeps track of where 'all out' items start
+    private Button mDoneButton;
 
 
-    public static ItemFragment newInstance(UUID crimeId) {
+    public static ItemFragment newInstance(UUID itemId) {
         Bundle args = new Bundle();
-        args.putSerializable(ARG_ITEM_ID, crimeId);
+        args.putSerializable(ARG_ITEM_ID, itemId);
         ItemFragment fragment = new ItemFragment();
         fragment.setArguments(args);
         return fragment;
@@ -48,6 +49,13 @@ public class ItemFragment extends Fragment {
         UUID ItemId = (UUID) getArguments().getSerializable(ARG_ITEM_ID);
         mItem =  ItemGen.get(getActivity()).getItem(ItemId);
     }
+
+//    @Override
+//    public void onPause() {
+//        super.onPause();
+//
+//        ItemGen.get(getActivity()).updateItem(mItem);
+//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,7 +82,7 @@ public class ItemFragment extends Fragment {
         });
 
         mItemPrice = (EditText)v.findViewById(R.id.item_price);
-        mItemPrice.setText("$"+mItem.getPrice());
+        mItemPrice.setText(mItem.getPrice());
         mItemPrice.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(
@@ -84,6 +92,8 @@ public class ItemFragment extends Fragment {
             @Override
             public void onTextChanged(
                     CharSequence s, int start, int before, int count) {
+                String input = s.toString();
+                //check for valid input
                 mItem.setPrice(s.toString());
 
             }

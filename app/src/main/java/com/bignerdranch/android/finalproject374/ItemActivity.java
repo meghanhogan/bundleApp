@@ -14,10 +14,10 @@ import java.util.UUID;
 public class ItemActivity extends SingleFragmentActivity {
 
     private static final String EXTRA_ITEM_ID =
-            "com.bignerdranch.android.criminalintent.crime_id";
-    public static Intent newIntent(Context packageContext, UUID crimeId) {
+            "com.bignerdranch.android.project374-grocery_list.item_id";
+    public static Intent newIntent(Context packageContext, UUID itemId) {
         Intent intent = new Intent(packageContext, ItemActivity.class);
-        intent.putExtra(EXTRA_ITEM_ID, crimeId);
+        intent.putExtra(EXTRA_ITEM_ID, itemId);
         return intent;
     }
 
