@@ -1,0 +1,25 @@
+Model View Controller 
+
+Model
+
+Array of Items—-ArrayList <—- ItemGen
+		  |	
+		mItems
+		  |
+		  |
+		  |
+		  |
+Controller	  |
+		  |
+		  |
+		ItemListFragment ——> GetActivity
+		      |		    	  |
+		      |	 	   ItemListActivity
+		      |			  |
+		      |			  |
+View   		      | 		  |
+		      |			  |
+		      |			  |
+		   RecyclerView  	  |
+					  |
+				     FrameLayout
