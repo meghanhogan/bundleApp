@@ -1,0 +1,18 @@
+Midway Report
+
+As of 12/1
+-app’s basic functionality almost all implemented:
+	-adding items
+	-removing items
+	-editing items
+	-creating bundles
+	-aggregating price
+-left for basic functionality
+	-sort items in list by status
+	-fix local database implementation
+	-add server-based database and authentication
+-todo past functionality
+	-work around the venmo problem (no longer issuing access codes)
+		-send another kind of intent? messaging? in-app notifications?
+	-design/style/drawables
+	-dealing with multiple ‘groups’ and group membership
