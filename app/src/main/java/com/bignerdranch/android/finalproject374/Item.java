@@ -19,11 +19,12 @@ public class Item implements Serializable {
     public Item(){
         //generate random unique id for each item
         mId = UUID.randomUUID();
-        mStatus = 0;
+
     }
 
     public Item(UUID uuid){
         mId = uuid;
+        mStatus = 0;
     }
 
     public UUID getId(){

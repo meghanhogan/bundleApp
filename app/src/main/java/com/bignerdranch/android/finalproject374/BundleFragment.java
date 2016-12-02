@@ -26,7 +26,6 @@ public class BundleFragment extends Fragment {
     private ArrayList<Item> mBundleList;
     public RecyclerView mBundleRecyclerView;
     public TextView mPriceTextView;
-    public Double mPrice;
     private ItemAdapter mAdapter;
 
 
@@ -53,9 +52,8 @@ public class BundleFragment extends Fragment {
         mBundleRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         mPriceTextView = (TextView)v.findViewById(R.id.bundle_price_text_view);
-        mPrice = priceAdder();
         System.out.println("price is " + priceAdder());
-        mPriceTextView.setText("Bundle total is: $" + mPrice.toString());
+        mPriceTextView.setText("Bundle total is: $" + priceAdder().toString());
 
         updateUI();
         ItemTouchHelper.Callback callback = new BundleFragment.ListItemTouchHelper(mAdapter);
@@ -75,6 +73,7 @@ public class BundleFragment extends Fragment {
 
     public void updateUI(){
         List<Item> items = mBundleList;
+        mPriceTextView.setText("Bundle total is: $" + priceAdder().toString());
 
         mAdapter = new ItemAdapter(items);
         mBundleRecyclerView.setAdapter(mAdapter);
@@ -103,23 +102,19 @@ public class BundleFragment extends Fragment {
         private ItemAdapter mAdapter;
 
         public ListItemTouchHelper(ItemAdapter itemAdapter){
-            super(ItemTouchHelper.UP| ItemTouchHelper.DOWN, ItemTouchHelper.LEFT|ItemTouchHelper.RIGHT);
+            super(0| 0, ItemTouchHelper.LEFT|0);
             this.mAdapter = itemAdapter;
         }
         @Override
         public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-            return false;// drag and drop not included
+            //move not implemented
+            return false;
         }
         @Override
         public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
             // if left, remove from adapter
             if (direction == ItemTouchHelper.LEFT){
-                //System.out.println("swiped left");
                 mAdapter.remove(viewHolder.getAdapterPosition());
-            }
-            if (direction == ItemTouchHelper.RIGHT){
-                //System.out.println("swiped right");
-                mAdapter.onSwipe(viewHolder.getAdapterPosition());
             }
 
         }

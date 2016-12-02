@@ -21,7 +21,7 @@ public class ItemBaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db){
         db.execSQL("create table " + ItemTable.NAME + "(" +
-            "_id integer primary key autoincrement, " +
+                "_id integer primary key autoincrement, " +
                 ItemTable.Cols.UUID + ", " +
                 ItemTable.Cols.Name + ", " +
                 ItemTable.Cols.Status + ", " +

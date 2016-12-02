@@ -34,13 +34,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:drawable="@drawable/add_icon" />
+        android:background="@drawable/add_icon"
+         />
 
     <Button
         android:id="@+id/list_bundle_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/bundle"
-        android:layout_gravity="bottom|right"/>
+        android:layout_gravity="bottom|end"/>
 
 </LinearLayout>

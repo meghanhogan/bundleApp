@@ -29,6 +29,6 @@ public class ItemCursorWrapper extends CursorWrapper{
         item.setStatus(status);
         item.setPrice(price);
 
-        return null;
+        return item;
     }
 }

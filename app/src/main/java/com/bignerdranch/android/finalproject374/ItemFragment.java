@@ -50,12 +50,12 @@ public class ItemFragment extends Fragment {
         mItem =  ItemGen.get(getActivity()).getItem(ItemId);
     }
 
-//    @Override
-//    public void onPause() {
-//        super.onPause();
-//
-//        ItemGen.get(getActivity()).updateItem(mItem);
-//    }
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        ItemGen.get(getActivity()).updateItem(mItem);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -117,6 +117,7 @@ public class ItemFragment extends Fragment {
 
         return v;
     }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

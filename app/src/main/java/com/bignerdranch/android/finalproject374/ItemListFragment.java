@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -77,6 +78,7 @@ public class ItemListFragment extends Fragment{
     private void updateUI(){
         ItemGen itemGen = ItemGen.get(getActivity());
         List<Item> items = itemGen.getItems();
+        System.out.println("items size is " + items.size());
 
         mAdapter = new ItemAdapter(items);
         mItemRecyclerView.setAdapter(mAdapter);
@@ -95,12 +97,13 @@ public class ItemListFragment extends Fragment{
         private ItemAdapter mAdapter;
 
         public ListItemTouchHelper(ItemAdapter itemAdapter){
-            super(ItemTouchHelper.UP| ItemTouchHelper.DOWN, ItemTouchHelper.LEFT|ItemTouchHelper.RIGHT);
+            super(0| 0, ItemTouchHelper.LEFT|ItemTouchHelper.RIGHT);
             this.mAdapter = itemAdapter;
         }
         @Override
         public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-            return false;// drag and drop not included
+            // drag to move not implemented
+            return false;
         }
         @Override
         public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
@@ -120,12 +123,16 @@ public class ItemListFragment extends Fragment{
     private class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView mNameTextView;
+        private TextView mPriceTextView;
+        private View mItemView;
         private Item mItem;
 
         public ItemHolder(View itemView){
             super(itemView);
             itemView.setOnClickListener(this);
+            mItemView = itemView;
             mNameTextView = (TextView) itemView.findViewById(R.id.list_item_name_text_view);
+            mPriceTextView = (TextView) itemView.findViewById(R.id.list_item_price_text_view);
         }
 
         @Override
@@ -133,10 +140,10 @@ public class ItemListFragment extends Fragment{
             boolean inList = listCheck();
             if(inList){
                 mBundleList.add(mItem);
-                mNameTextView.setBackgroundResource(R.color.colorSelected);
+                mItemView.setBackgroundResource(R.color.colorSelected);
             }
             else if (!inList){
-                mNameTextView.setBackgroundResource(R.color.colorPrimary);
+                mItemView.setBackgroundResource(R.color.background_material_light);
             }
 
         }
@@ -144,6 +151,9 @@ public class ItemListFragment extends Fragment{
         public void bindItem(Item item){
             mItem = item;
             mNameTextView.setText(item.getName());
+            if(item.getPrice() != null){
+                mPriceTextView.setText("$"+item.getPrice());
+            }
         }
 
         public boolean listCheck(){
@@ -185,15 +195,21 @@ public class ItemListFragment extends Fragment{
         }
 
         public void remove(int position){
-            mItems.remove(position);
-            notifyItemRemoved(position);
+            System.out.println("this items position is " + position);
+            //mItems.remove(position);
+            Item item = mItems.get(position);
+            ItemGen itemGen = ItemGen.get(getActivity());
+            itemGen.removeItem(item);
             updateUI();
         }
 
         public void onSwipe(int position){
+            //System.out.println("this item's position is " + position);
             Item item = mItems.get(position);
+            //System.out.println("item is " + item.getName());
             Intent intent = ItemActivity.newIntent(getActivity(), item.getId());
             startActivity(intent);
+
         }
 
         public void setItems(List<Item> items){
