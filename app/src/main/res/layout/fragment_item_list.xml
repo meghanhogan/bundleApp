@@ -17,6 +17,7 @@
             android:gravity="center"
             android:padding="5dp" />
         <TextView
+            android:id="@+id/group_members"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>

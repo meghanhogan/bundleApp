@@ -16,8 +16,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.graphics.Color.GREEN;
-import static android.support.v7.widget.helper.ItemTouchHelper.Callback.makeMovementFlags;
 
 /**
  * Created by meghanhogan on 11/17/16.
@@ -30,6 +28,7 @@ public class ItemListFragment extends Fragment{
     private ItemAdapter mAdapter;
     private Button mAddItemButton;
     private Button mBundleButton;
+    private TextView mGroupMembers;
     public ArrayList<Item> mBundleList = new ArrayList<Item>();
 
 
@@ -42,6 +41,9 @@ public class ItemListFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_item_list, container, false);
+
+        mGroupMembers = (TextView)view.findViewById(R.id.group_members);
+        setMembersText();
 
         mItemRecyclerView = (RecyclerView)view.findViewById(R.id.recycler_view_1);;
         mItemRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -74,6 +76,18 @@ public class ItemListFragment extends Fragment{
 
         //System.out.println("does the list exist? " + mBundleList.size());
         return view;
+    }
+
+    private void setMembersText() {
+        MemberGen memberGen = MemberGen.get(getActivity());
+        List<Member> mMembers = memberGen.getMembers();
+        if(mMembers.size()>0){
+            String members = "";
+            for (int i=0; i<mMembers.size(); i++){
+                members += mMembers.get(i).getName()+ "  ";
+            }
+            mGroupMembers.setText(members);
+        }
     }
 
     @Override
@@ -114,6 +128,10 @@ public class ItemListFragment extends Fragment{
         }
         @Override
         public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+            Log.d(TAG, "begin on swiped mitems size " + mAdapter.getItemCount());
+            ItemGen itemGen = ItemGen.get(getActivity());
+            List<Item> items = itemGen.getItems();
+            mAdapter.setItems(items);
             // if left, remove from adapter
             if (direction == ItemTouchHelper.LEFT){
                 //System.out.println("swiped left");
@@ -122,7 +140,7 @@ public class ItemListFragment extends Fragment{
             }
             if (direction == ItemTouchHelper.RIGHT){
                 //System.out.println("swiped right");
-                Log.d(TAG, "swiping to edit, size is " + mAdapter.getItemCount());
+                Log.d(TAG, "swiping to edit, size is " + mAdapter.getItemCount()+ "position is" + viewHolder.getAdapterPosition());
                 mAdapter.onSwipe(viewHolder.getAdapterPosition());
 
             }
@@ -184,7 +202,7 @@ public class ItemListFragment extends Fragment{
 
         public ItemAdapter(List<Item> items){
             mItems = items;
-            Log.d(TAG, "mItems has been set to " + mItems.size());
+            Log.d(TAG, "Adapter Constructor mItems has been set to " + mItems.size());
         }
 
 
@@ -212,7 +230,7 @@ public class ItemListFragment extends Fragment{
         }
 
         public void remove(int position){
-            Log.d(TAG, "remove item, size is " + getItemCount());
+            Log.d(TAG, "Adapter.remove item, size is " + getItemCount());
             Item item = mItems.get(position);
             ItemGen itemGen = ItemGen.get(getActivity());
             itemGen.removeItem(item);
@@ -220,7 +238,7 @@ public class ItemListFragment extends Fragment{
         }
 
         public void onSwipe(int position){
-            Log.d(TAG, "swipe item to edit, size is "+ getItemCount());
+            Log.d(TAG, "swipe item to edit, size is "+ getItemCount() + " position is " + position);
             Item item = mItems.get(position);
             Intent intent = ItemActivity.newIntent(getActivity(), item.getId());
             startActivity(intent);

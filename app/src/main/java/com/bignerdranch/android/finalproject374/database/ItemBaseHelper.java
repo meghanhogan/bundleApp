@@ -4,7 +4,9 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.bignerdranch.android.finalproject374.Member;
 import com.bignerdranch.android.finalproject374.database.ItemDbSchema.ItemTable;
+import com.bignerdranch.android.finalproject374.database.ItemDbSchema.MemberTable;
 
 /**
  * Created by meghanhogan on 11/29/16.
@@ -26,6 +28,14 @@ public class ItemBaseHelper extends SQLiteOpenHelper {
                 ItemTable.Cols.Name + ", " +
                 ItemTable.Cols.Status + ", " +
                 ItemTable.Cols.Price +
+                ")"
+        );
+
+        db.execSQL("create table " + MemberTable.NAME + "(" +
+                "_id integer primary key autoincrement, " +
+                MemberTable.Cols.UUID + ", " +
+                MemberTable.Cols.Name + ", " +
+                MemberTable.Cols.Number +
                 ")"
         );
 

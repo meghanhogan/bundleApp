@@ -1,5 +1,7 @@
 package com.bignerdranch.android.finalproject374;
 
+import java.util.UUID;
+
 /**
  * Created by meghanhogan on 12/5/16.
  */
@@ -8,9 +10,14 @@ package com.bignerdranch.android.finalproject374;
 public class Member {
     public String mName;
     public String mNumber;
+    public UUID mId;
 
     public Member(){
+        mId = UUID.randomUUID();
+    }
 
+    public Member(UUID id){
+        mId = id;
     }
 
     public void setName(String name){
@@ -27,5 +34,9 @@ public class Member {
 
     public String getNumber(){
         return mNumber;
+    }
+
+    public UUID getId(){
+        return mId;
     }
 }

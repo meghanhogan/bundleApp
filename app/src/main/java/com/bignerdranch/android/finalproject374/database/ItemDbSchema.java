@@ -17,4 +17,15 @@ public class ItemDbSchema {
 
         }
     }
+
+    public static final class MemberTable{
+        public static final String NAME = "members";
+
+        public static final class Cols {
+            public static final String UUID = "uuid";
+            public static final String Name = "name";
+            public static final String Number = "number";
+
+        }
+    }
 }

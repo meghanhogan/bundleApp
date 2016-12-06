@@ -1,18 +1,22 @@
 package com.bignerdranch.android.finalproject374;
 
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
-import android.test.suitebuilder.TestMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.bignerdranch.android.finalproject374.database.ItemDbSchema;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +32,9 @@ public class HomeFragment extends Fragment {
     public List<Member> mMembers = new ArrayList();
     //private List<String> mNumbers = new ArrayList();
     private static final int REQUEST_CONTACT = 0;
+    private SQLiteDatabase mDatabase;
+    private Context mContext;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -64,6 +71,10 @@ public class HomeFragment extends Fragment {
         if(packageManager.resolveActivity(pickContact, packageManager.MATCH_DEFAULT_ONLY) == null){
             mAddMemberButton.setEnabled(false);
         }
+
+        MemberGen memberGen = MemberGen.get(getActivity());
+        mMembers = memberGen.getMembers();
+        setMembersText();
 
         return view;
     }
@@ -107,6 +118,7 @@ public class HomeFragment extends Fragment {
                 member.setName(name);
                 member.setNumber(number);
                 mMembers.add(member);
+                MemberGen.get(getActivity()).addMember(member);
 
             } finally {
                 setMembersText();
@@ -114,5 +126,4 @@ public class HomeFragment extends Fragment {
             }
         }
     }
-
 }

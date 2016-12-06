@@ -7,7 +7,7 @@
     <string name="select_status">Set Status</string>
     <string name="bundle_items">Bundle Items</string>
     <string name="new_bundle">New Bundle</string>
-    <string name="request_payment">Request Payment</string>
+    <string name="request_payment">Split Bundle With Group</string>
     <string name="no_members">This group currently has no members</string>
     <string name="message_text">You are being charged %1$s for a bundle! Please pay up</string>
 

@@ -84,13 +84,13 @@ public class BundleFragment extends Fragment {
     }
 
     public String makeNumbersList(){
-        //need to make this database-reliant! not just passing things- does not work.
         String numList = "";
-        HomeFragment frag = new HomeFragment();
-        mMembers = frag.getMembers();
-        for(Member member: mMembers){
+        MemberGen memberGen = MemberGen.get(getActivity());
+        mMembers = memberGen.getMembers();
+
+        for (Member member : mMembers){
             String number = member.getNumber();
-            numList += number+";";
+            numList += number + ";";
         }
         numList = numList.substring(0, numList.length()-1);
         return numList;
@@ -131,7 +131,8 @@ public class BundleFragment extends Fragment {
 
     public String getMessageText(){
         String messageText = null;
-        String priceString = priceAdder().toString();
+        Double dividedPrice = priceAdder()/mMembers.size();
+        String priceString = dividedPrice.toString();
         messageText = getString(R.string.message_text, priceString);
         return messageText;
     }
