@@ -1,17 +1,14 @@
 package com.bignerdranch.android.finalproject374;
 
+import java.io.Serializable;
 import java.util.UUID;
 
-import static android.graphics.Color.BLACK;
-import static android.graphics.Color.GREEN;
-import static android.graphics.Color.RED;
-import static android.graphics.Color.YELLOW;
 
 /**
  * Created by meghanhogan on 11/17/16.
  */
 
-public class Item {
+public class Item implements Serializable {
 
     private UUID mId;
     private String mName;
@@ -22,6 +19,11 @@ public class Item {
     public Item(){
         //generate random unique id for each item
         mId = UUID.randomUUID();
+
+    }
+
+    public Item(UUID uuid){
+        mId = uuid;
         mStatus = 0;
     }
 
