@@ -9,6 +9,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -23,10 +24,12 @@ public class BundleFragment extends Fragment {
 
     private static final String ARG_BUNDLE_LIST = "bundle_list";
 
-    private ArrayList<Item> mBundleList;
+    public ArrayList<Item> mBundleList;
     public RecyclerView mBundleRecyclerView;
     public TextView mPriceTextView;
-    private ItemAdapter mAdapter;
+    public ItemAdapter mAdapter;
+    public Button mRequestPaymentButton;
+    public List<Member> mMembers;
 
 
     public static BundleFragment newInstance(ArrayList<Item> bundleList) {
@@ -55,6 +58,20 @@ public class BundleFragment extends Fragment {
         System.out.println("price is " + priceAdder());
         mPriceTextView.setText("Bundle total is: $" + priceAdder().toString());
 
+        mRequestPaymentButton = (Button) v.findViewById(R.id.request_payment_button);
+        mRequestPaymentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //start intent to send request payment messages
+                String numList = makeNumbersList();
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_PHONE_NUMBER, numList);
+                intent.putExtra(Intent.EXTRA_TEXT, getMessageText());
+                startActivity(intent);
+            }
+        });
+
         updateUI();
         ItemTouchHelper.Callback callback = new BundleFragment.ListItemTouchHelper(mAdapter);
         ItemTouchHelper mIth = new ItemTouchHelper(callback);
@@ -63,6 +80,20 @@ public class BundleFragment extends Fragment {
 
         return v;
 
+
+    }
+
+    public String makeNumbersList(){
+        //need to make this database-reliant! not just passing things- does not work.
+        String numList = "";
+        HomeFragment frag = new HomeFragment();
+        mMembers = frag.getMembers();
+        for(Member member: mMembers){
+            String number = member.getNumber();
+            numList += number+";";
+        }
+        numList = numList.substring(0, numList.length()-1);
+        return numList;
     }
 
     @Override
@@ -97,6 +128,14 @@ public class BundleFragment extends Fragment {
         }
         return finPrice;
     }
+
+    public String getMessageText(){
+        String messageText = null;
+        String priceString = priceAdder().toString();
+        messageText = getString(R.string.message_text, priceString);
+        return messageText;
+    }
+
 
     public class ListItemTouchHelper extends ItemTouchHelper.SimpleCallback {
         private ItemAdapter mAdapter;

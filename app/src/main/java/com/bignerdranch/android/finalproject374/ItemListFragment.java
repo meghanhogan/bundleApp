@@ -6,11 +6,11 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -24,6 +24,7 @@ import static android.support.v7.widget.helper.ItemTouchHelper.Callback.makeMove
  */
 
 public class ItemListFragment extends Fragment{
+    private static final String TAG = "debug";
 
     private RecyclerView mItemRecyclerView;
     private ItemAdapter mAdapter;
@@ -31,6 +32,12 @@ public class ItemListFragment extends Fragment{
     private Button mBundleButton;
     public ArrayList<Item> mBundleList = new ArrayList<Item>();
 
+
+
+    public static ItemListFragment newInstance() {
+        ItemListFragment fragment = new ItemListFragment();
+        return fragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -78,7 +85,7 @@ public class ItemListFragment extends Fragment{
     private void updateUI(){
         ItemGen itemGen = ItemGen.get(getActivity());
         List<Item> items = itemGen.getItems();
-        System.out.println("items size is " + items.size());
+        Log.d(TAG, "Updating UI");
 
         mAdapter = new ItemAdapter(items);
         mItemRecyclerView.setAdapter(mAdapter);
@@ -110,11 +117,14 @@ public class ItemListFragment extends Fragment{
             // if left, remove from adapter
             if (direction == ItemTouchHelper.LEFT){
                 //System.out.println("swiped left");
+                Log.d(TAG, "swiping to remove, size is " + mAdapter.getItemCount());
                 mAdapter.remove(viewHolder.getAdapterPosition());
             }
             if (direction == ItemTouchHelper.RIGHT){
                 //System.out.println("swiped right");
+                Log.d(TAG, "swiping to edit, size is " + mAdapter.getItemCount());
                 mAdapter.onSwipe(viewHolder.getAdapterPosition());
+
             }
 
         }
@@ -174,6 +184,13 @@ public class ItemListFragment extends Fragment{
 
         public ItemAdapter(List<Item> items){
             mItems = items;
+            Log.d(TAG, "mItems has been set to " + mItems.size());
+        }
+
+
+        public void setItems(List<Item> items){
+            mItems=items;
+            Log.d(TAG, "setting mItems to new items (from db) size " + mItems.size());
         }
 
         @Override
@@ -195,8 +212,7 @@ public class ItemListFragment extends Fragment{
         }
 
         public void remove(int position){
-            System.out.println("this items position is " + position);
-            //mItems.remove(position);
+            Log.d(TAG, "remove item, size is " + getItemCount());
             Item item = mItems.get(position);
             ItemGen itemGen = ItemGen.get(getActivity());
             itemGen.removeItem(item);
@@ -204,16 +220,11 @@ public class ItemListFragment extends Fragment{
         }
 
         public void onSwipe(int position){
-            //System.out.println("this item's position is " + position);
+            Log.d(TAG, "swipe item to edit, size is "+ getItemCount());
             Item item = mItems.get(position);
-            //System.out.println("item is " + item.getName());
             Intent intent = ItemActivity.newIntent(getActivity(), item.getId());
             startActivity(intent);
 
-        }
-
-        public void setItems(List<Item> items){
-            mItems=items;
         }
     }
 
