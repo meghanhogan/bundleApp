@@ -23,9 +23,6 @@ import static android.R.attr.id;
 public class ItemGen {
 
     private static ItemGen sItemGen;
-
-
-    //private List<Item> mItems;
     private Context mContext;
     private SQLiteDatabase mDatabase;
 
@@ -40,20 +37,16 @@ public class ItemGen {
         mContext = context.getApplicationContext();
         mDatabase=new ItemBaseHelper(mContext).getWritableDatabase();
 
-        //mItems = new ArrayList<>();
     }
 
     public void addItem(Item i){
-        //mItems.add(i);
-        //i.setPos(mItems.size()-1);
-
+        //add item to database
         ContentValues values = getContentValues(i);
-
         mDatabase.insert(ItemTable.NAME, null, values);
     }
 
     public List<Item> getItems(){
-        //return mItems;
+        //return mItems
         List<Item> items = new ArrayList<>();
 
         ItemCursorWrapper cursor = queryItems(null, null);
@@ -71,11 +64,7 @@ public class ItemGen {
     }
 
     public Item getItem(UUID id){
-//        for (Item item : mItems){
-//            if(item.getId().equals(id)){
-//                return item;
-//            }
-//        }
+        //return item from ItemCursorWrapper
         ItemCursorWrapper cursor = queryItems(ItemTable.Cols.UUID + " = ?",
                 new String[] {id.toString()}
         );
@@ -92,6 +81,7 @@ public class ItemGen {
     }
 
     public void removeItem(Item item){
+        //remove item from the database
         String stringUUID = item.getId().toString();
         mDatabase.delete(ItemTable.NAME,
                 ItemTable.Cols.UUID + " = ?",
@@ -99,6 +89,7 @@ public class ItemGen {
     }
 
     public void updateItem(Item item){
+        //update item in the database
         String uuidString = item.getId().toString();
         ContentValues values = getContentValues(item);
 
@@ -106,6 +97,7 @@ public class ItemGen {
     }
 
     private static ContentValues getContentValues(Item item){
+        //get content values for item
         ContentValues values = new ContentValues();
 
         values.put(ItemTable.Cols.UUID, item.getId().toString());
@@ -117,6 +109,7 @@ public class ItemGen {
     }
 
     private ItemCursorWrapper queryItems(String whereClause, String[] whereArgs){
+        //create an item cursor wrapepr
         Cursor cursor =mDatabase.query(
                 ItemTable.NAME,
                 null,

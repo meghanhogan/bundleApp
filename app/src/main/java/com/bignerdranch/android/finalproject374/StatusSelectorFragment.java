@@ -21,6 +21,8 @@ import android.widget.Spinner;
 
 public class StatusSelectorFragment extends DialogFragment implements AdapterView.OnItemSelectedListener{
 
+    //class for setting up spinner dialog
+
     public static final String EXTRA_STATUS =
             "com.bignerdranch.android.criminalintent.date";
 

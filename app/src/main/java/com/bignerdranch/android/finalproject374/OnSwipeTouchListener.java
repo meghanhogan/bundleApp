@@ -9,6 +9,8 @@ import android.view.View.OnTouchListener;
 
 public class OnSwipeTouchListener implements OnTouchListener {
 
+    //class for detecting swipes on screen
+
     private final GestureDetector gestureDetector;
 
     public OnSwipeTouchListener (Context ctx){
