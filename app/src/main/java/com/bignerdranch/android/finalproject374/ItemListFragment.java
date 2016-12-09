@@ -67,11 +67,13 @@ public class ItemListFragment extends Fragment{
         mBundleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //intent to start bundleActivity
+                //if bundle is empty --> dialog
                 if(mBundleList.size()==0){
                     DialogFragment dialog = new EmptyBundleFragment();
                     dialog.show(getFragmentManager(), ALERT_DIALOG);
-                }else {
+                }
+                //else, start bundle activity
+                else {
                     Intent intent = BundleActivity.newIntent(getActivity(), mBundleList);
                     startActivity(intent);
                 }
@@ -186,6 +188,7 @@ public class ItemListFragment extends Fragment{
         }
 
         public void bindItem(Item item){
+            //reset all items to unselected color
             mItemView.setBackgroundResource(R.color.background_material_light);
             mItem = item;
             mNameTextView.setText(item.getName());

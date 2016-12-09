@@ -16,10 +16,7 @@ import com.bignerdranch.android.finalproject374.R;
 
 public class EmptyBundleFragment extends DialogFragment {
 
-//    public static EmptyBundleFragment newInstance() {
-//        EmptyBundleFragment fragment = new EmptyBundleFragment();
-//        return fragment;
-//    }
+//dialog appears when user attempts to create an empty bundle. Click ok to dismiss
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {

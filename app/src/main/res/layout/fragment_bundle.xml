@@ -4,6 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:src="@drawable/bundle_icon"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/bundle_recycler_view"
         android:layout_width="match_parent"
