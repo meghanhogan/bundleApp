@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 public class BundleActivity extends SingleFragmentActivity {
 
+    //get Bundle List extra from ItemListFragment
     private static final String EXTRA_BUNDLE_LIST =
             "com.bignerdranch.android.project374-grocery_list";
     public static Intent newIntent(Context packageContext, ArrayList<Item> bundleList) {
@@ -20,6 +21,7 @@ public class BundleActivity extends SingleFragmentActivity {
         return intent;
     }
 
+    //Create BundleFragment
     @Override
     protected Fragment createFragment() {
         ArrayList<Item> bundleList = (ArrayList<Item>) getIntent()

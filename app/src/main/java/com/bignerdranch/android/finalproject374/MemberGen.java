@@ -44,6 +44,7 @@ public class MemberGen {
     }
 
     public List<Member> getMembers(){
+        //return members list from database
 
         List<Member> members = new ArrayList<>();
 
@@ -62,6 +63,7 @@ public class MemberGen {
     }
 
     public Member getMember(UUID id){
+        //return member from database
 
         MemberCursorWrapper cursor = queryItems(ItemDbSchema.MemberTable.Cols.UUID + " = ?",
                 new String[] {id.toString()}
@@ -79,6 +81,7 @@ public class MemberGen {
     }
 
     private MemberCursorWrapper queryItems(String whereClause, String[] whereArgs){
+        //create member cursor wrapper
         Cursor cursor = mDatabase.query(
                 ItemDbSchema.MemberTable.NAME,
                 null,
@@ -91,6 +94,8 @@ public class MemberGen {
     }
 
     private static ContentValues getContentValues(Member member){
+        //get content values for Member
+        //get content values for Member
         ContentValues values = new ContentValues();
 
         values.put(ItemDbSchema.MemberTable.Cols.UUID, member.getId().toString());

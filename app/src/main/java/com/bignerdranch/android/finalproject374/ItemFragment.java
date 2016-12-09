@@ -16,6 +16,8 @@ import android.widget.EditText;
 
 import java.util.UUID;
 
+import static android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL;
+
 /**
  * Created by meghanhogan on 11/17/16.
  */
@@ -30,9 +32,9 @@ public class ItemFragment extends Fragment {
     private EditText mItemName;
     private EditText mItemPrice;
     private Button mStatusSelector;
+    //for implementing sort by status
     private int mStartOf1; //keeps track of where 'running low' items start in the list
     private int mStartOf2; //keeps track of where 'all out' items start
-    private Button mDoneButton;
 
 
     public static ItemFragment newInstance(UUID itemId) {
@@ -62,6 +64,7 @@ public class ItemFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_item, container, false);
 
+        //detect and update changes to name field
         mItemName = (EditText)v.findViewById(R.id.item_name);
         mItemName.setText(mItem.getName());
         mItemName.addTextChangedListener(new TextWatcher() {
@@ -80,7 +83,7 @@ public class ItemFragment extends Fragment {
                 // This one too
             }
         });
-
+        //detect and update changes to price field
         mItemPrice = (EditText)v.findViewById(R.id.item_price);
         mItemPrice.setText(mItem.getPrice());
         mItemPrice.addTextChangedListener(new TextWatcher() {
@@ -94,12 +97,21 @@ public class ItemFragment extends Fragment {
                     CharSequence s, int start, int before, int count) {
                 String input = s.toString();
                 //check for valid input
-                mItem.setPrice(s.toString());
+                //keyboard only alows for numbers and numeric symbols but this makes sure it is valid
+                //eg 12.1.1 not allowed, negative numbers not allowed
+                if (isNumeric(input) == true)
+                {
+                    System.out.println("its numeric");
+                    mItem.setPrice(s.toString());
+                }
+                else {
+                    mItem.setPrice("0.00");
+                }
 
             }
             @Override
             public void afterTextChanged(Editable s) {
-                // This one too
+                // intentionally left blank
             }
         });
 
@@ -108,6 +120,7 @@ public class ItemFragment extends Fragment {
         mStatusSelector.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //status selector starts dialog fragment
                 FragmentManager manager = getFragmentManager();
                 StatusSelectorFragment dialog = StatusSelectorFragment.newInstance(mItem.statusString());
                 dialog.setTargetFragment(ItemFragment.this, REQUEST_STATUS);
@@ -118,9 +131,24 @@ public class ItemFragment extends Fragment {
         return v;
     }
 
+    public static boolean isNumeric(String str) {
+        //return true if input is numeric, false otherwise
+        try {
+            double d = Double.parseDouble(str);
+        }
+        catch(NumberFormatException nfe)
+        {
+            System.out.println("isNumeric is false");
+            return false;
+        }
+        System.out.println("isNumeric is true");
+        return true;
+    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //result of dialog fragment
         if (resultCode != Activity.RESULT_OK) {
             return; }
         if (requestCode == REQUEST_STATUS) {
@@ -128,10 +156,12 @@ public class ItemFragment extends Fragment {
                     .getSerializableExtra(StatusSelectorFragment.EXTRA_STATUS);
             mItem.setStatus(mItem.convertStatus(status));
             mStatusSelector.setText(status);
-            moveItem();
+            //move item if implemented sort by status
+            //moveItem();
         }
     }
 
+    //todo implement sort by status
     public void moveItem(){
         if (mItem.getStatus() == 0){
             if (mItem.getPos() > mStartOf1){

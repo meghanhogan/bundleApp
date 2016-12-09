@@ -30,10 +30,7 @@ public class HomeFragment extends Fragment {
     private Button mAddMemberButton;
     private TextView mMembersTextView;
     public List<Member> mMembers = new ArrayList();
-    //private List<String> mNumbers = new ArrayList();
     private static final int REQUEST_CONTACT = 0;
-    private SQLiteDatabase mDatabase;
-    private Context mContext;
 
 
     @Override
@@ -66,7 +63,7 @@ public class HomeFragment extends Fragment {
             }
 
         });
-
+        //check for contacts app
         PackageManager packageManager = getActivity().getPackageManager();
         if(packageManager.resolveActivity(pickContact, packageManager.MATCH_DEFAULT_ONLY) == null){
             mAddMemberButton.setEnabled(false);
@@ -80,6 +77,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void setMembersText() {
+        //get members from mMembers
         if(mMembers.size()>0){
             String members = "";
             for (int i=0; i<mMembers.size(); i++){
@@ -89,17 +87,14 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    public List getMembers(){
-        return mMembers;
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
+        //results from pickContact
         if(requestCode == REQUEST_CONTACT && data != null){
             Uri contactUri = data.getData();
             String[] queryFields = new String[] {
-                    ContactsContract.Contacts.DISPLAY_NAME,
-                    ContactsContract.CommonDataKinds.Phone.NUMBER
+                    ContactsContract.Contacts.DISPLAY_NAME, //get names
+                    ContactsContract.CommonDataKinds.Phone.NUMBER //get numbers
             };
 
             Cursor cursor = getActivity().getContentResolver().query(contactUri, queryFields, null, null, null);

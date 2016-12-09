@@ -1,8 +1,11 @@
 package com.bignerdranch.android.finalproject374;
 
+import android.support.v4.app.DialogFragment;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -12,15 +15,19 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.telephony.PhoneNumberUtils.normalizeNumber;
 
 
 /**
  * Created by meghanhogan on 11/28/16.
  */
 
-public class BundleFragment extends Fragment {
+public class BundleFragment extends Fragment{
 
     private static final String ARG_BUNDLE_LIST = "bundle_list";
 
@@ -30,6 +37,7 @@ public class BundleFragment extends Fragment {
     public ItemAdapter mAdapter;
     public Button mRequestPaymentButton;
     public List<Member> mMembers;
+    public DecimalFormat df = new DecimalFormat("###.##"); //used to truncate doubles into normal dollar form
 
 
     public static BundleFragment newInstance(ArrayList<Item> bundleList) {
@@ -43,7 +51,10 @@ public class BundleFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //init mBundleList to intent extra
         mBundleList = (ArrayList<Item>) getArguments().getSerializable(ARG_BUNDLE_LIST);
+        MemberGen memberGen = MemberGen.get(getActivity());
+        mMembers = memberGen.getMembers();
     }
 
     @Override
@@ -51,23 +62,23 @@ public class BundleFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_bundle, container, false);
 
+
         mBundleRecyclerView = (RecyclerView)v.findViewById(R.id.bundle_recycler_view);
         mBundleRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        //set price view
         mPriceTextView = (TextView)v.findViewById(R.id.bundle_price_text_view);
-        System.out.println("price is " + priceAdder());
-        mPriceTextView.setText("Bundle total is: $" + priceAdder().toString());
+        String truncatedPrice = df.format(priceAdder());
+        System.out.println("trunc price is " + truncatedPrice);
+        mPriceTextView.setText("Bundle total is: $" + truncatedPrice);
 
         mRequestPaymentButton = (Button) v.findViewById(R.id.request_payment_button);
         mRequestPaymentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //start intent to send request payment messages
-                String numList = makeNumbersList();
-                Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.setType("text/plain");
-                intent.putExtra(Intent.EXTRA_PHONE_NUMBER, numList);
-                intent.putExtra(Intent.EXTRA_TEXT, getMessageText());
+                Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse(makeNumbersList()));
+                intent.putExtra("sms_body", getMessageData());
                 startActivity(intent);
             }
         });
@@ -83,17 +94,30 @@ public class BundleFragment extends Fragment {
 
     }
 
+
+
     public String makeNumbersList(){
+        //generates a list of numbers from the members table to send message to
         String numList = "";
-        MemberGen memberGen = MemberGen.get(getActivity());
-        mMembers = memberGen.getMembers();
 
         for (Member member : mMembers){
             String number = member.getNumber();
+            number = normalizeNumber(number);
             numList += number + ";";
         }
-        numList = numList.substring(0, numList.length()-1);
+        numList = "smsto:" + numList.substring(0, numList.length()-1);
+        System.out.println(numList);
         return numList;
+    }
+    public String getMessageData(){
+        //generate text message
+        String messageText = null;
+        Double dividedPrice = priceAdder()/mMembers.size();
+        df.setRoundingMode(RoundingMode.DOWN);
+        String priceString = "$"+ df.format(dividedPrice);
+        System.out.println(priceString);
+        messageText = getString(R.string.message_text, priceString);
+        return messageText;
     }
 
     @Override
@@ -103,7 +127,9 @@ public class BundleFragment extends Fragment {
     }
 
     public void updateUI(){
+        //reset the adapter
         List<Item> items = mBundleList;
+        //reset the price
         mPriceTextView.setText("Bundle total is: $" + priceAdder().toString());
 
         mAdapter = new ItemAdapter(items);
@@ -119,6 +145,7 @@ public class BundleFragment extends Fragment {
     }
 
     public Double priceAdder(){
+        //calculate price
         Double finPrice = 0.0;
         for (int i=0; i<mBundleList.size(); i++){
             if(mBundleList.get(i).getPrice() != null) {
@@ -129,16 +156,10 @@ public class BundleFragment extends Fragment {
         return finPrice;
     }
 
-    public String getMessageText(){
-        String messageText = null;
-        Double dividedPrice = priceAdder()/mMembers.size();
-        String priceString = dividedPrice.toString();
-        messageText = getString(R.string.message_text, priceString);
-        return messageText;
-    }
 
 
     public class ListItemTouchHelper extends ItemTouchHelper.SimpleCallback {
+        //class for detecting swipes on recyclerView
         private ItemAdapter mAdapter;
 
         public ListItemTouchHelper(ItemAdapter itemAdapter){
@@ -166,6 +187,7 @@ public class BundleFragment extends Fragment {
         private Item mItem;
 
         public ItemHolder(View itemView){
+            //item view in recyclerview
             super(itemView);
             mNameTextView = (TextView) itemView.findViewById(R.id.list_item_name_text_view);
         }
@@ -211,11 +233,6 @@ public class BundleFragment extends Fragment {
             updateUI();
         }
 
-        public void onSwipe(int position){
-            Item item = mBundleList.get(position);
-            Intent intent = ItemActivity.newIntent(getActivity(), item.getId());
-            startActivity(intent);
-        }
     }
 
 }
