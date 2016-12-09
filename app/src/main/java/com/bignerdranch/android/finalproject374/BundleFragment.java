@@ -69,9 +69,8 @@ public class BundleFragment extends Fragment{
         //set price view
         mPriceTextView = (TextView)v.findViewById(R.id.bundle_price_text_view);
         String truncatedPrice = df.format(priceAdder());
-        System.out.println("trunc price is " + truncatedPrice);
+        System.out.println("trunc price" + truncatedPrice);
         mPriceTextView.setText("Bundle total is: $" + truncatedPrice);
-
         mRequestPaymentButton = (Button) v.findViewById(R.id.request_payment_button);
         mRequestPaymentButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,7 +114,6 @@ public class BundleFragment extends Fragment{
         Double dividedPrice = priceAdder()/mMembers.size();
         df.setRoundingMode(RoundingMode.DOWN);
         String priceString = "$"+ df.format(dividedPrice);
-        System.out.println(priceString);
         messageText = getString(R.string.message_text, priceString);
         return messageText;
     }
@@ -130,7 +128,8 @@ public class BundleFragment extends Fragment{
         //reset the adapter
         List<Item> items = mBundleList;
         //reset the price
-        mPriceTextView.setText("Bundle total is: $" + priceAdder().toString());
+        String truncatedPrice = df.format(priceAdder());
+        mPriceTextView.setText("Bundle total is: $" + truncatedPrice);
 
         mAdapter = new ItemAdapter(items);
         mBundleRecyclerView.setAdapter(mAdapter);

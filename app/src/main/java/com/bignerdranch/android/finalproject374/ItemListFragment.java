@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +34,9 @@ public class ItemListFragment extends Fragment{
     private Button mBundleButton;
     private TextView mGroupMembers;
     public ArrayList<Item> mBundleList = new ArrayList<Item>();
+
+    public DecimalFormat df = new DecimalFormat("###.##"); //used to truncate doubles into normal dollar form
+
 
 
 
@@ -60,6 +64,7 @@ public class ItemListFragment extends Fragment{
                 ItemGen.get(getActivity()).addItem(item);
                 Intent intent = ItemActivity.newIntent(getActivity(), item.getId());
                 startActivity(intent);
+
             }
         });
 
@@ -193,7 +198,9 @@ public class ItemListFragment extends Fragment{
             mItem = item;
             mNameTextView.setText(item.getName());
             if(item.getPrice() != null){
-                mPriceTextView.setText("$"+item.getPrice());
+                Double price = Double.parseDouble(item.getPrice());
+                String truncatedPrice = df.format(price);
+                mPriceTextView.setText("$"+truncatedPrice);
             }
         }
 
