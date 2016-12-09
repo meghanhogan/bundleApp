@@ -2,6 +2,7 @@ package com.bignerdranch.android.finalproject374;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,6 +24,8 @@ import java.util.List;
 
 public class ItemListFragment extends Fragment{
     private static final String TAG = "debug";
+
+    private static final String ALERT_DIALOG = "DialogSelector";
 
     private RecyclerView mItemRecyclerView;
     private ItemAdapter mAdapter;
@@ -65,8 +68,13 @@ public class ItemListFragment extends Fragment{
             @Override
             public void onClick(View v) {
                 //intent to start bundleActivity
-                Intent intent = BundleActivity.newIntent(getActivity(), mBundleList);
-                startActivity(intent);
+                if(mBundleList.size()==0){
+                    DialogFragment dialog = new EmptyBundleFragment();
+                    dialog.show(getFragmentManager(), ALERT_DIALOG);
+                }else {
+                    Intent intent = BundleActivity.newIntent(getActivity(), mBundleList);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -102,10 +110,8 @@ public class ItemListFragment extends Fragment{
         ItemGen itemGen = ItemGen.get(getActivity());
         List<Item> items = itemGen.getItems();
 
-        //mAdapter = new ItemAdapter(items);
-        //mItemRecyclerView.setAdapter(mAdapter);
-        //clear mBundleList
         mBundleList.clear();
+
 
         if (mAdapter == null) {
             mAdapter = new ItemAdapter(items);
@@ -180,6 +186,7 @@ public class ItemListFragment extends Fragment{
         }
 
         public void bindItem(Item item){
+            mItemView.setBackgroundResource(R.color.background_material_light);
             mItem = item;
             mNameTextView.setText(item.getName());
             if(item.getPrice() != null){

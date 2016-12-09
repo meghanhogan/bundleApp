@@ -1,9 +1,11 @@
 package com.bignerdranch.android.finalproject374;
 
+import android.support.v4.app.DialogFragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -24,7 +27,7 @@ import static android.telephony.PhoneNumberUtils.normalizeNumber;
  * Created by meghanhogan on 11/28/16.
  */
 
-public class BundleFragment extends Fragment {
+public class BundleFragment extends Fragment{
 
     private static final String ARG_BUNDLE_LIST = "bundle_list";
 
@@ -59,6 +62,7 @@ public class BundleFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_bundle, container, false);
 
+
         mBundleRecyclerView = (RecyclerView)v.findViewById(R.id.bundle_recycler_view);
         mBundleRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -89,6 +93,8 @@ public class BundleFragment extends Fragment {
 
 
     }
+
+
 
     public String makeNumbersList(){
         //generates a list of numbers from the members table to send message to
