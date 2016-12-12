@@ -12,5 +12,6 @@
     <string name="message_text">You are being charged %1$s for a bundle! Please pay up</string>
     <string name="empty_bundle">You\'ve created an empty bundle!</string>
     <string name="ok_button">OK</string>
+    <string name="no_members_toast">your group has no members to text!</string>
 
 </resources>

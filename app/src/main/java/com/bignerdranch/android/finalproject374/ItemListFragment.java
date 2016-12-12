@@ -4,14 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
@@ -24,7 +25,6 @@ import java.util.List;
  */
 
 public class ItemListFragment extends Fragment{
-    private static final String TAG = "debug";
 
     private static final String ALERT_DIALOG = "DialogSelector";
 
@@ -33,6 +33,7 @@ public class ItemListFragment extends Fragment{
     private Button mAddItemButton;
     private Button mBundleButton;
     private TextView mGroupMembers;
+    private ImageView mBundleLogo;
     public ArrayList<Item> mBundleList = new ArrayList<Item>();
 
     public DecimalFormat df = new DecimalFormat("###.##"); //used to truncate doubles into normal dollar form
@@ -54,6 +55,16 @@ public class ItemListFragment extends Fragment{
 
         mItemRecyclerView = (RecyclerView)view.findViewById(R.id.recycler_view_1);;
         mItemRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        mBundleLogo = (ImageView)view.findViewById(R.id.bundle_logo);
+        mBundleLogo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //intent to start itemActivity
+                Intent intent = HomeActivity.newIntent(getActivity());
+                startActivity(intent);
+            }
+        });
 
         mAddItemButton = (Button)view.findViewById(R.id.list_add_button);
         mAddItemButton.setOnClickListener(new View.OnClickListener() {
@@ -187,7 +198,7 @@ public class ItemListFragment extends Fragment{
                 mItemView.setBackgroundResource(R.color.colorSelected);
             }
             else if (!inList){
-                mItemView.setBackgroundResource(R.color.background_material_light);
+                mItemView.setBackgroundResource(R.color.colorBackground);
             }
 
         }

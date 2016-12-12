@@ -4,6 +4,13 @@
     android:layout_height="fill_parent"
     android:orientation="vertical">
 
+    <ImageView
+        android:id="@+id/bundle_logo"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:src="@drawable/bundle_icon"/>
+
     <LinearLayout
         android:id="@+id/group_view"
         android:layout_width="match_parent"

@@ -13,7 +13,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -37,6 +39,7 @@ public class BundleFragment extends Fragment{
     public ItemAdapter mAdapter;
     public Button mRequestPaymentButton;
     public List<Member> mMembers;
+    public ImageView mBundleLogo;
     public DecimalFormat df = new DecimalFormat("###.##"); //used to truncate doubles into normal dollar form
 
 
@@ -66,6 +69,16 @@ public class BundleFragment extends Fragment{
         mBundleRecyclerView = (RecyclerView)v.findViewById(R.id.bundle_recycler_view);
         mBundleRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        mBundleLogo = (ImageView)v.findViewById(R.id.bundle_logo);
+        mBundleLogo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //intent to start itemActivity
+                Intent intent = HomeActivity.newIntent(getActivity());
+                startActivity(intent);
+            }
+        });
+
         //set price view
         mPriceTextView = (TextView)v.findViewById(R.id.bundle_price_text_view);
         String truncatedPrice = df.format(priceAdder());
@@ -76,9 +89,16 @@ public class BundleFragment extends Fragment{
             @Override
             public void onClick(View v) {
                 //start intent to send request payment messages
-                Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse(makeNumbersList()));
-                intent.putExtra("sms_body", getMessageData());
-                startActivity(intent);
+                String numList = makeNumbersList();
+                if (numList.length() >0){
+                    Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse(numList));
+                    intent.putExtra("sms_body", getMessageData());
+                    startActivity(intent);
+                }
+                else{
+                    Toast toast = Toast.makeText(getActivity(), R.string.no_members_toast, Toast.LENGTH_SHORT);
+                    toast.show();
+                }
             }
         });
 
@@ -98,14 +118,16 @@ public class BundleFragment extends Fragment{
     public String makeNumbersList(){
         //generates a list of numbers from the members table to send message to
         String numList = "";
-
-        for (Member member : mMembers){
-            String number = member.getNumber();
-            number = normalizeNumber(number);
-            numList += number + ";";
+        if(mMembers.size()>0) {
+            System.out.println("in makeNumbersList");
+            for (Member member : mMembers) {
+                String number = member.getNumber();
+                number = normalizeNumber(number);
+                numList += number + ";";
+            }
+            numList = "smsto:" + numList.substring(0, numList.length() - 1);
+            System.out.println(numList);
         }
-        numList = "smsto:" + numList.substring(0, numList.length()-1);
-        System.out.println(numList);
         return numList;
     }
     public String getMessageData(){

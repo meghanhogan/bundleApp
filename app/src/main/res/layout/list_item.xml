@@ -5,7 +5,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp">
+    android:layout_margin="10dp"
+    android:background="@color/colorBackground">
 
     <TextView
         android:id="@+id/list_item_name_text_view"
@@ -14,6 +15,7 @@
         android:layout_centerInParent="true"
         android:textStyle="bold"
         tools:text="Item Name"
+        android:textSize="24sp"
         />
 
     <TextView
