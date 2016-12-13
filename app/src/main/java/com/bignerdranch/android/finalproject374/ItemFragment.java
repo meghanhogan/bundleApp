@@ -32,7 +32,7 @@ public class ItemFragment extends Fragment {
     private EditText mItemName;
     private EditText mItemPrice;
     private Button mStatusSelector;
-    //for implementing sort by status
+    //for implementing sort by status: to do in later version
     private int mStartOf1; //keeps track of where 'running low' items start in the list
     private int mStartOf2; //keeps track of where 'all out' items start
 
@@ -101,7 +101,6 @@ public class ItemFragment extends Fragment {
                 //eg 12.1.1 not allowed, negative numbers not allowed
                 if (isNumeric(input) == true)
                 {
-                    System.out.println("its numeric");
                     mItem.setPrice(s.toString());
                 }
                 else {
@@ -138,10 +137,10 @@ public class ItemFragment extends Fragment {
         }
         catch(NumberFormatException nfe)
         {
-            System.out.println("isNumeric is false");
+            //if input can't be parsed to double, it is invalid
             return false;
         }
-        System.out.println("isNumeric is true");
+        //if it is parsable, it is valid
         return true;
     }
 

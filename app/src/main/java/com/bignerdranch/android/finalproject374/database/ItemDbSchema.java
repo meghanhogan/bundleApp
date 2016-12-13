@@ -6,6 +6,8 @@ package com.bignerdranch.android.finalproject374.database;
 
 public class ItemDbSchema {
 
+    //database scheme for app. Contains tables items, for items in the list, and members, for group members
+
     public static final class ItemTable{
         public static final String NAME = "items";
 

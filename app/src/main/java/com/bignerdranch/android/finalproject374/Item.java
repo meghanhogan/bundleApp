@@ -10,11 +10,13 @@ import java.util.UUID;
 
 public class Item implements Serializable {
 
+    //item object
+
     private UUID mId;
     private String mName;
     private String mPrice;
     private int mStatus; //can be 0, 1, 2 == in stock, running low, out
-    private int mPosition;
+    private int mPosition; //for implementation of sort by status
 
     public Item(){
         //generate random unique id for each item
@@ -64,6 +66,7 @@ public class Item implements Serializable {
     }
 
     public String statusString(){
+        //convert status from int to string
         if (mStatus == 0){
             return "In Stock";
         }
@@ -77,6 +80,7 @@ public class Item implements Serializable {
     }
 
     public int convertStatus(String status){
+        //convert status from string to int
 
         if (status.equals("In Stock")){
             return 0;

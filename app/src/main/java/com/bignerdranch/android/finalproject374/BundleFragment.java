@@ -69,11 +69,11 @@ public class BundleFragment extends Fragment{
         mBundleRecyclerView = (RecyclerView)v.findViewById(R.id.bundle_recycler_view);
         mBundleRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        //click the logo to get back to the homescreen
         mBundleLogo = (ImageView)v.findViewById(R.id.bundle_logo);
         mBundleLogo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //intent to start itemActivity
                 Intent intent = HomeActivity.newIntent(getActivity());
                 startActivity(intent);
             }
@@ -119,7 +119,6 @@ public class BundleFragment extends Fragment{
         //generates a list of numbers from the members table to send message to
         String numList = "";
         if(mMembers.size()>0) {
-            System.out.println("in makeNumbersList");
             for (Member member : mMembers) {
                 String number = member.getNumber();
                 number = normalizeNumber(number);

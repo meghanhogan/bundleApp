@@ -47,7 +47,6 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //start intent to choose contact and add to mMembers
-                System.out.println("button clicked");
                 startActivityForResult(pickContact, REQUEST_CONTACT);
             }
         });
@@ -57,7 +56,6 @@ public class HomeFragment extends Fragment {
         view.setOnTouchListener(new OnSwipeTouchListener(getActivity()) {
             public void onSwipeLeft() {
                 //Start ItemListActivity
-                System.out.println("screen swiped");
                 Intent intent = ItemListActivity.newIntent(getActivity());
                 startActivity(intent);
             }
@@ -70,6 +68,7 @@ public class HomeFragment extends Fragment {
         }
 
         MemberGen memberGen = MemberGen.get(getActivity());
+        //get members from database
         mMembers = memberGen.getMembers();
         setMembersText();
 
@@ -93,11 +92,14 @@ public class HomeFragment extends Fragment {
         if(requestCode == REQUEST_CONTACT && data != null){
             Uri contactUri = data.getData();
             String[] queryFields = new String[] {
-                    ContactsContract.Contacts.DISPLAY_NAME, //get names
-                    ContactsContract.CommonDataKinds.Phone.NUMBER //get numbers
+                    //get names
+                    ContactsContract.Contacts.DISPLAY_NAME,
+                    //get numbers
+                    ContactsContract.CommonDataKinds.Phone.NUMBER
             };
 
             Cursor cursor = getActivity().getContentResolver().query(contactUri, queryFields, null, null, null);
+            //find indexes for required data
             int nameIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
             int numberIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
 
@@ -105,7 +107,7 @@ public class HomeFragment extends Fragment {
                 if(cursor.getCount() == 0){
                     return;
                 }
-
+                //extract data, create new member, add to database
                 cursor.moveToFirst();
                 String name = cursor.getString(nameIndex);
                 String number = cursor.getString(numberIndex);
