@@ -20,6 +20,7 @@ public class ItemBaseHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, VERSION);
     }
 
+    //creates tables if necessary
     @Override
     public void onCreate(SQLiteDatabase db){
         db.execSQL("create table " + ItemTable.NAME + "(" +

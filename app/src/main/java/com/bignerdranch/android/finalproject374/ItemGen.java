@@ -21,6 +21,7 @@ import static android.R.attr.id;
  */
 
 public class ItemGen {
+    //deals with item-db interactions
 
     private static ItemGen sItemGen;
     private Context mContext;

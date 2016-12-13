@@ -19,6 +19,7 @@ import java.util.UUID;
  */
 
 public class MemberGen {
+    //deals with member-db interactions
 
     private static  MemberGen sMemberGen;
 
@@ -94,7 +95,6 @@ public class MemberGen {
     }
 
     private static ContentValues getContentValues(Member member){
-        //get content values for Member
         //get content values for Member
         ContentValues values = new ContentValues();
 

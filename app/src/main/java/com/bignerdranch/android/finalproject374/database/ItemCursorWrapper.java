@@ -14,6 +14,7 @@ import java.util.UUID;
  */
 
 public class ItemCursorWrapper extends CursorWrapper{
+    //creates a cursor wrapper for getting items out of the database
     public ItemCursorWrapper(Cursor cursor){
         super(cursor);
     }

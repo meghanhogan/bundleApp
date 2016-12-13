@@ -8,7 +8,7 @@ import java.util.UUID;
 
 
 public class Member {
-    //class for group members
+    //class for group member objects, contains name, number, and id
     public String mName;
     public String mNumber;
     public UUID mId;

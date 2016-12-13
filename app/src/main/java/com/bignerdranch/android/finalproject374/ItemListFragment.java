@@ -56,16 +56,17 @@ public class ItemListFragment extends Fragment{
         mItemRecyclerView = (RecyclerView)view.findViewById(R.id.recycler_view_1);;
         mItemRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        //click the logo to get back to the home screen
         mBundleLogo = (ImageView)view.findViewById(R.id.bundle_logo);
         mBundleLogo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //intent to start itemActivity
                 Intent intent = HomeActivity.newIntent(getActivity());
                 startActivity(intent);
             }
         });
 
+        //add new item to list
         mAddItemButton = (Button)view.findViewById(R.id.list_add_button);
         mAddItemButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,6 +80,7 @@ public class ItemListFragment extends Fragment{
             }
         });
 
+        //create bundle with selected items
         mBundleButton = (Button)view.findViewById(R.id.list_bundle_button);
         mBundleButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,7 +129,7 @@ public class ItemListFragment extends Fragment{
         //rest list in adapter
         ItemGen itemGen = ItemGen.get(getActivity());
         List<Item> items = itemGen.getItems();
-
+        //reset bundle list to empty
         mBundleList.clear();
 
 
@@ -187,6 +189,7 @@ public class ItemListFragment extends Fragment{
             mItemView = itemView;
             mNameTextView = (TextView) itemView.findViewById(R.id.list_item_name_text_view);
             mPriceTextView = (TextView) itemView.findViewById(R.id.list_item_price_text_view);
+            mItemView.setBackgroundResource(R.color.colorBackground);
         }
 
         @Override
@@ -205,7 +208,7 @@ public class ItemListFragment extends Fragment{
 
         public void bindItem(Item item){
             //reset all items to unselected color
-            mItemView.setBackgroundResource(R.color.background_material_light);
+            mItemView.setBackgroundResource(R.color.colorBackground);
             mItem = item;
             mNameTextView.setText(item.getName());
             if(item.getPrice() != null){

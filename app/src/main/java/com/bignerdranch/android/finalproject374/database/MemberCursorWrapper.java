@@ -13,7 +13,7 @@ import java.util.UUID;
  */
 
 public class MemberCursorWrapper extends CursorWrapper {
-
+    //creates a cursor wrapper for getting members out of the database
     public MemberCursorWrapper(Cursor cursor){
         super(cursor);
     }

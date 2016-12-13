@@ -73,8 +73,6 @@ public class StatusSelectorFragment extends DialogFragment implements AdapterVie
     public void onItemSelected(AdapterView<?> parent, View view,
                                int pos, long id) {
         mStatus = parent.getItemAtPosition(pos).toString();
-        System.out.println("selected item is " + mStatus);
-        //updateUI();
     }
 
     public void onNothingSelected(AdapterView<?> parent) {
