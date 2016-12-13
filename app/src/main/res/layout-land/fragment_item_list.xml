@@ -2,24 +2,27 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/colorBackground"
+    android:weightSum="1">
 
     <ImageView
         android:id="@+id/bundle_logo"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_gravity="center"
-        android:src="@drawable/bundle_icon"/>
+        android:src="@drawable/bundle_icon"
+        android:layout_weight=".1"/>
 
     <LinearLayout
         android:id="@+id/group_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="29dp"
         android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
             android:text="@string/group_text"
             android:gravity="center"
             android:padding="5dp" />
@@ -33,23 +36,27 @@
         android:id="@+id/recycler_view_1"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_margin="10dp">
+        android:layout_height="0dp"
+        android:layout_margin="10dp"
+        android:layout_weight=".8">
     </android.support.v7.widget.RecyclerView>
 
     <Button
         android:id="@+id/list_add_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_gravity="center"
         android:background="@drawable/add_icon"
+        android:layout_weight=".03"
         />
 
     <Button
         android:id="@+id/list_bundle_button"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="33dp"
         android:text="@string/bundle"
-        android:layout_gravity="bottom|end"/>
+        android:layout_gravity="end"
+        android:background="@color/colorSelected"
+        android:layout_weight="0.02" />
 
 </LinearLayout>

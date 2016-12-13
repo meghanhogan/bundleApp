@@ -189,6 +189,7 @@ public class ItemListFragment extends Fragment{
             mItemView = itemView;
             mNameTextView = (TextView) itemView.findViewById(R.id.list_item_name_text_view);
             mPriceTextView = (TextView) itemView.findViewById(R.id.list_item_price_text_view);
+            mItemView.setBackgroundResource(R.color.colorBackground);
         }
 
         @Override
@@ -207,7 +208,7 @@ public class ItemListFragment extends Fragment{
 
         public void bindItem(Item item){
             //reset all items to unselected color
-            mItemView.setBackgroundResource(R.color.background_material_light);
+            mItemView.setBackgroundResource(R.color.colorBackground);
             mItem = item;
             mNameTextView.setText(item.getName());
             if(item.getPrice() != null){

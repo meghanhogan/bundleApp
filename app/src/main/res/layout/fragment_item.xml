@@ -27,7 +27,7 @@
             android:hint="@string/new_item_price_hint"
             android:inputType="numberDecimal"
             android:digits="0123456789."
-        />
+            />
     </LinearLayout>
     <Button
         android:id="@+id/status_selector"
