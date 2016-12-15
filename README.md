@@ -1,7 +1,7 @@
 # Project for CMSC 374 Mobile Apps
 ## welcome to bundle beta
 
-features of this app include:
+###features of this app include:
 
 
 *local database storage for list items and group members
@@ -13,7 +13,7 @@ features of this app include:
 *messaging to group members to split the cost of the bundle between the group
 
 
-to use this app:
+###to use this app:
 
 *on the home screen, you can add members to the group from your contacts via the 'plus' button. Swipe the screen left to enter the app's main activity
 
